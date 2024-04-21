@@ -7,10 +7,10 @@ namespace WebServCo\JSONAPI\Service;
 use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
 use WebServCo\Data\Contract\Extraction\DataExtractionContainerInterface;
+use WebServCo\Http\Contract\Message\Request\RequestHeaderServiceInterface;
 use WebServCo\JSONAPI\Contract\Document\JSONAPIInterface;
 use WebServCo\JSONAPI\Contract\Service\JSONAPIRequestServiceInterface;
 
-use function array_key_exists;
 use function is_array;
 use function json_decode;
 
@@ -18,25 +18,17 @@ use const JSON_THROW_ON_ERROR;
 
 final class JSONAPIRequestService implements JSONAPIRequestServiceInterface
 {
-    public function __construct(private readonly DataExtractionContainerInterface $dataExtractionContainer)
-    {
+    public function __construct(
+        private readonly DataExtractionContainerInterface $dataExtractionContainer,
+        private readonly RequestHeaderServiceInterface $requestHeaderService,
+    ) {
     }
 
     public function contentTypeMatches(ServerRequestInterface $request): bool
     {
-        $contentTypeHeaderValue = $this->getContentTypeHeaderValue($request);
+        $contentTypeHeaderValue = $this->requestHeaderService->getHeaderValue('Content-Type', $request);
 
         return $contentTypeHeaderValue === JSONAPIInterface::MEDIA_TYPE;
-    }
-
-    public function getContentTypeHeaderValue(ServerRequestInterface $request): string
-    {
-        $headers = $request->getHeader('Content-Type');
-        if (!array_key_exists(0, $headers)) {
-            throw new UnexpectedValueException('Missing required header');
-        }
-
-        return $headers[0];
     }
 
     /**
