@@ -6,7 +6,7 @@ namespace WebServCo\JSONAPI\Service\Form;
 
 use Fig\Http\Message\RequestMethodInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use WebServCo\Data\Container\Extraction\DataExtractionContainer;
+use WebServCo\Data\Contract\Extraction\DataExtractionContainerInterface;
 use WebServCo\Form\Contract\FormInterface;
 use WebServCo\Form\Service\AbstractForm;
 use WebServCo\JSONAPI\Contract\Service\JSONAPIRequestServiceInterface;
@@ -22,7 +22,7 @@ final class JSONAPIItemForm extends AbstractForm implements FormInterface
      * @param array<int,\WebServCo\Form\Contract\FormValidatorInterface> $validators
      */
     public function __construct(
-        private DataExtractionContainer $dataExtractionContainer,
+        private DataExtractionContainerInterface $dataExtractionContainer,
         private JSONAPIRequestServiceInterface $requestService,
         array $fields,
         array $filters,
