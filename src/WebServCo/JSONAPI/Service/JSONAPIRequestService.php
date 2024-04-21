@@ -48,7 +48,7 @@ final class JSONAPIRequestService implements JSONAPIRequestServiceInterface
 
         if ($requestBody === '') {
             // Possible situation: the body contents were read elsewhere and the stream was not rewinded.
-            throw new UnexpectedValueException('Response body is empty.');
+            throw new UnexpectedValueException('Request body is empty.');
         }
 
         $array = json_decode($requestBody, true, 512, JSON_THROW_ON_ERROR);
