@@ -65,6 +65,6 @@ final class JSONAPIRequestService implements JSONAPIRequestServiceInterface
             'jsonapi/version',
         );
 
-        return ($version === $expectedVersion);
+        return $version === $expectedVersion;
     }
 }
