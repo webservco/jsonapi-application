@@ -65,10 +65,6 @@ final class JSONAPIRequestService implements JSONAPIRequestServiceInterface
             'jsonapi/version',
         );
 
-        if ($version !== $expectedVersion) {
-            throw new UnexpectedValueException('Invalid jsonapi.version.');
-        }
-
-        return true;
+        return ($version === $expectedVersion);
     }
 }
