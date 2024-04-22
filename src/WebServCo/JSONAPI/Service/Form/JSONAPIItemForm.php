@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WebServCo\JSONAPI\Service\Form;
 
 use Fig\Http\Message\RequestMethodInterface;
+use OutOfBoundsException;
 use Psr\Http\Message\ServerRequestInterface;
 use WebServCo\Data\Contract\Extraction\DataExtractionContainerInterface;
 use WebServCo\Form\Contract\FormInterface;
@@ -54,9 +55,8 @@ final class JSONAPIItemForm extends AbstractForm implements FormInterface
         $requestBodyAsArray = $this->requestService->getRequestBodyAsArray($request);
 
         // Check version
-        if (!$this->requestService->versionMatches($requestBodyAsArray, 1.1)) {
-            $this->addErrorMessage('JSONAPI version does not match.');
-
+        if (!$this->handleVersionMatchCheck($requestBodyAsArray)) {
+            // Error messages already handled.
             return false;
         }
 
@@ -88,5 +88,26 @@ final class JSONAPIItemForm extends AbstractForm implements FormInterface
 
         // Filter and validate each field.
         return $this->processForm();
+    }
+
+    /**
+     * @phpcs:ignore SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
+     * @param array<mixed> $requestBodyAsArray
+     */
+    private function handleVersionMatchCheck(array $requestBodyAsArray): bool
+    {
+        try {
+            if (!$this->requestService->versionMatches($requestBodyAsArray, 1.1)) {
+                $this->addErrorMessage('JSONAPI version does not match.');
+
+                return false;
+            }
+        } catch (OutOfBoundsException $exception) {
+            $this->addErrorMessage($exception->getMessage());
+
+            return false;
+        }
+
+        return true;
     }
 }
