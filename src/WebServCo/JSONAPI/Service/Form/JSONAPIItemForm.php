@@ -33,27 +33,42 @@ final class JSONAPIItemForm extends AbstractForm implements FormInterface
 
     public function handleRequest(ServerRequestInterface $request): bool
     {
-        // Check content type.
-        if (!$this->requestService->contentTypeMatches($request)) {
-            // Content type doesn't match, stop processing.
-            return false;
-        }
-
         // Check request method.
         $acceptableMethods = [RequestMethodInterface::METHOD_POST, RequestMethodInterface::METHOD_PUT];
         if (!in_array($request->getMethod(), $acceptableMethods, true)) {
-            // Request method doesn't match, stop processing.
+            $this->addErrorMessage('Request method does not match');
+
+            return false;
+        }
+
+        // Request method matches, set flag.
+        $this->isSent = true;
+
+        // Check content type.
+        if (!$this->requestService->contentTypeMatches($request)) {
+            $this->addErrorMessage('Content type does not match.');
+
             return false;
         }
 
         $requestBodyAsArray = $this->requestService->getRequestBodyAsArray($request);
 
         // Check version
-        $this->requestService->validateVersion($requestBodyAsArray, 1.1);
+        if (!$this->requestService->versionMatches($requestBodyAsArray, 1.1)) {
+            $this->addErrorMessage('JSONAPI version does not match.');
 
-        // Request method matches, set flag.
-        $this->isSent = true;
+            return false;
+        }
 
+        return $this->handleFormProcessing($requestBodyAsArray);
+    }
+
+    /**
+     * @phpcs:ignore SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
+     * @param array<mixed> $requestBodyAsArray
+     */
+    private function handleFormProcessing(array $requestBodyAsArray): bool
+    {
         /**
          * Start from local fields and iterate,
          * because id is stored in the actual formField (string key),

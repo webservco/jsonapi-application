@@ -58,7 +58,7 @@ final class JSONAPIRequestService implements JSONAPIRequestServiceInterface
     /**
      * @inheritDoc
      */
-    public function validateVersion(array $requestBodyAsArray, float $expectedVersion = 1.1): bool
+    public function versionMatches(array $requestBodyAsArray, float $expectedVersion = 1.1): bool
     {
         $version = $this->dataExtractionContainer->getLooseArrayNonEmptyDataExtractionService()->getNonEmptyFloat(
             $requestBodyAsArray,
