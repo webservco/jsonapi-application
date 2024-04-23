@@ -80,12 +80,17 @@ final class JSONAPIItemForm extends AbstractForm implements FormInterface
          * it simply only process stuff that we need.
          */
         foreach ($this->getFields() as $formField) {
-            $formField->setValue(
-                $this->dataExtractionContainer->getLooseArrayDataExtractionService()->getString(
-                    $requestBodyAsArray,
-                    sprintf('data/attributes/%s', $formField->getId()),
-                ),
-            );
+            try {
+                $formField->setValue(
+                    $this->dataExtractionContainer->getLooseArrayDataExtractionService()->getString(
+                        $requestBodyAsArray,
+                        sprintf('data/attributes/%s', $formField->getId()),
+                    ),
+                );
+            } catch (OutOfBoundsException $e) {
+                $this->isValid = false;
+                $formField->addErrorMessage($e->getMessage());
+            }
         }
 
         // Filter and validate each field.
