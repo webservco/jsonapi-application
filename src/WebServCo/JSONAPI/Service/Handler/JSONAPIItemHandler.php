@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebServCo\JSONAPI\Service\Form;
+namespace WebServCo\JSONAPI\Service\Handler;
 
 use Fig\Http\Message\RequestMethodInterface;
 use OutOfBoundsException;
@@ -16,7 +16,12 @@ use WebServCo\JSONAPI\Contract\Service\JSONAPIRequestServiceInterface;
 use function in_array;
 use function sprintf;
 
-final class JSONAPIItemForm extends AbstractForm implements FormInterface
+/**
+ * A JSONAPI request item handler.
+ *
+ * Makes use of form system to take advantage of validation/filtering.
+ */
+final class JSONAPIItemHandler extends AbstractForm implements FormInterface
 {
     private const VALID_REQUEST_METHODS = [
         RequestMethodInterface::METHOD_DELETE,
