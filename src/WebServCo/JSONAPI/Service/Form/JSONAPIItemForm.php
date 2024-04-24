@@ -37,7 +37,6 @@ final class JSONAPIItemForm extends AbstractForm implements FormInterface
         // Check request method.
         $acceptableMethods = [RequestMethodInterface::METHOD_POST, RequestMethodInterface::METHOD_PUT];
         if (!in_array($request->getMethod(), $acceptableMethods, true)) {
-            $this->isValid = false;
             $this->addErrorMessage('Request method does not match');
 
             return false;
@@ -48,7 +47,6 @@ final class JSONAPIItemForm extends AbstractForm implements FormInterface
 
         // Check content type.
         if (!$this->requestService->contentTypeMatches($request)) {
-            $this->isValid = false;
             $this->addErrorMessage('Content type does not match.');
 
             return false;
@@ -88,7 +86,6 @@ final class JSONAPIItemForm extends AbstractForm implements FormInterface
                     ),
                 );
             } catch (OutOfBoundsException $e) {
-                $this->isValid = false;
                 $formField->addErrorMessage($e->getMessage());
             }
         }
@@ -105,13 +102,11 @@ final class JSONAPIItemForm extends AbstractForm implements FormInterface
     {
         try {
             if (!$this->requestService->versionMatches($requestBodyAsArray, 1.1)) {
-                $this->isValid = false;
                 $this->addErrorMessage('JSONAPI version does not match.');
 
                 return false;
             }
         } catch (OutOfBoundsException $exception) {
-            $this->isValid = false;
             $this->addErrorMessage($exception->getMessage());
 
             return false;
