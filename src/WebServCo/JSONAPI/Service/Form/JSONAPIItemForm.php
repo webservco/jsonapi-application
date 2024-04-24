@@ -7,6 +7,7 @@ namespace WebServCo\JSONAPI\Service\Form;
 use Fig\Http\Message\RequestMethodInterface;
 use OutOfBoundsException;
 use Psr\Http\Message\ServerRequestInterface;
+use UnexpectedValueException;
 use WebServCo\Data\Contract\Extraction\DataExtractionContainerInterface;
 use WebServCo\Form\Contract\FormInterface;
 use WebServCo\Form\Service\AbstractForm;
@@ -17,12 +18,21 @@ use function sprintf;
 
 final class JSONAPIItemForm extends AbstractForm implements FormInterface
 {
+    private const VALID_REQUEST_METHODS = [
+        RequestMethodInterface::METHOD_DELETE,
+        RequestMethodInterface::METHOD_GET,
+        RequestMethodInterface::METHOD_POST,
+        RequestMethodInterface::METHOD_PUT,
+    ];
+
     /**
+     * @param array<int,string> $acceptableRequestMethods
      * @param array<int,\WebServCo\Form\Contract\FormFieldInterface> $fields
      * @param array<int,\WebServCo\Form\Contract\FormFilterInterface> $filters
      * @param array<int,\WebServCo\Form\Contract\FormValidatorInterface> $validators
      */
     public function __construct(
+        private array $acceptableRequestMethods,
         private DataExtractionContainerInterface $dataExtractionContainer,
         private JSONAPIRequestServiceInterface $requestService,
         array $fields,
@@ -30,13 +40,18 @@ final class JSONAPIItemForm extends AbstractForm implements FormInterface
         array $validators,
     ) {
         parent::__construct($fields, $filters, $validators);
+
+        foreach ($acceptableRequestMethods as $acceptableRequestMethod) {
+            if (!in_array($acceptableRequestMethod, self::VALID_REQUEST_METHODS, true)) {
+                throw new UnexpectedValueException('Unsupported request method.');
+            }
+        }
     }
 
     public function handleRequest(ServerRequestInterface $request): bool
     {
         // Check request method.
-        $acceptableMethods = [RequestMethodInterface::METHOD_POST, RequestMethodInterface::METHOD_PUT];
-        if (!in_array($request->getMethod(), $acceptableMethods, true)) {
+        if (!in_array($request->getMethod(), $this->acceptableRequestMethods, true)) {
             $this->addErrorMessage('Request method does not match');
 
             return false;
