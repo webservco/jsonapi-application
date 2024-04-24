@@ -32,16 +32,16 @@ final class JSONAPIItemForm extends AbstractForm implements FormInterface
      * @param array<int,\WebServCo\Form\Contract\FormValidatorInterface> $validators
      */
     public function __construct(
-        private array $acceptableRequestMethods,
-        private DataExtractionContainerInterface $dataExtractionContainer,
-        private JSONAPIRequestServiceInterface $requestService,
+        private readonly array $acceptableRequestMethods,
+        private readonly DataExtractionContainerInterface $dataExtractionContainer,
+        private readonly JSONAPIRequestServiceInterface $requestService,
         array $fields,
         array $filters,
         array $validators,
     ) {
         parent::__construct($fields, $filters, $validators);
 
-        foreach ($acceptableRequestMethods as $acceptableRequestMethod) {
+        foreach ($this->acceptableRequestMethods as $acceptableRequestMethod) {
             if (!in_array($acceptableRequestMethod, self::VALID_REQUEST_METHODS, true)) {
                 throw new UnexpectedValueException('Unsupported request method.');
             }
