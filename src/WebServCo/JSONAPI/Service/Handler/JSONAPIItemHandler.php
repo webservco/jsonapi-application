@@ -9,8 +9,8 @@ use OutOfBoundsException;
 use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
 use WebServCo\Data\Contract\Extraction\DataExtractionContainerInterface;
-use WebServCo\Form\Contract\FormInterface;
 use WebServCo\Form\Service\AbstractForm;
+use WebServCo\JSONAPI\Contract\Service\JSONAPIHandlerInterface;
 use WebServCo\JSONAPI\Contract\Service\JSONAPIRequestServiceInterface;
 
 use function in_array;
@@ -21,7 +21,7 @@ use function sprintf;
  *
  * Makes use of form system to take advantage of validation/filtering.
  */
-final class JSONAPIItemHandler extends AbstractForm implements FormInterface
+final class JSONAPIItemHandler extends AbstractForm implements JSONAPIHandlerInterface
 {
     private const VALID_REQUEST_METHODS = [
         RequestMethodInterface::METHOD_DELETE,
