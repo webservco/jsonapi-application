@@ -89,6 +89,15 @@ final class JSONAPIItemHandler extends AbstractForm implements JSONAPIHandlerInt
      */
     private function handleFormProcessing(array $requestBodyAsArray): bool
     {
+        if ($requestBodyAsArray === []) {
+            /**
+             * Request body is an empty array if request should not have a body.
+             *
+             * @see JSONAPIRequestService.getRequestBodyAsArray
+             */
+            return true;
+        }
+
         /**
          * Start from local fields and iterate,
          * because id is stored in the actual formField (string key),
@@ -120,6 +129,15 @@ final class JSONAPIItemHandler extends AbstractForm implements JSONAPIHandlerInt
      */
     private function handleVersionMatchCheck(array $requestBodyAsArray): bool
     {
+        if ($requestBodyAsArray === []) {
+            /**
+             * Request body is an empty array if request should not have a body.
+             *
+             * @see JSONAPIRequestService.getRequestBodyAsArray
+             */
+            return true;
+        }
+
         try {
             if (!$this->requestService->versionMatches($requestBodyAsArray, 1.1)) {
                 $this->addErrorMessage('JSONAPI version does not match.');

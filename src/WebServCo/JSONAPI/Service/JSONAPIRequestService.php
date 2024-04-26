@@ -34,6 +34,11 @@ final class JSONAPIRequestService implements JSONAPIRequestServiceInterface
         $requestBody = $request->getBody()->getContents();
 
         if ($requestBody === '') {
+            if (!$this->requestBodyService->canHaveRequestBody($request)) {
+                // Correct that there is no request body.
+                return [];
+            }
+
             // Possible situation: the body contents were read elsewhere and the stream was not rewinded.
             throw new UnexpectedValueException('Request body is empty.');
         }
