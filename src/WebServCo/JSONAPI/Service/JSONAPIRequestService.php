@@ -7,6 +7,7 @@ namespace WebServCo\JSONAPI\Service;
 use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
 use WebServCo\Data\Contract\Extraction\DataExtractionContainerInterface;
+use WebServCo\Http\Contract\Message\Request\RequestBodyServiceInterface;
 use WebServCo\Http\Contract\Message\Request\RequestHeaderServiceInterface;
 use WebServCo\JSONAPI\Contract\Document\JSONAPIInterface;
 use WebServCo\JSONAPI\Contract\Service\JSONAPIRequestServiceInterface;
@@ -20,15 +21,9 @@ final class JSONAPIRequestService implements JSONAPIRequestServiceInterface
 {
     public function __construct(
         private readonly DataExtractionContainerInterface $dataExtractionContainer,
+        private readonly RequestBodyServiceInterface $requestBodyService,
         private readonly RequestHeaderServiceInterface $requestHeaderService,
     ) {
-    }
-
-    public function contentTypeMatches(ServerRequestInterface $request): bool
-    {
-        $contentTypeHeaderValue = $this->requestHeaderService->getHeaderValue('Content-Type', $request);
-
-        return $contentTypeHeaderValue === JSONAPIInterface::MEDIA_TYPE;
     }
 
     /**
@@ -53,6 +48,18 @@ final class JSONAPIRequestService implements JSONAPIRequestServiceInterface
         }
 
         return $array;
+    }
+
+    public function validateContentType(ServerRequestInterface $request): bool
+    {
+        if (!$this->requestBodyService->canHaveRequestBody($request)) {
+            // No request body, nothing to check.
+            return true;
+        }
+
+        $contentTypeHeaderValue = $this->requestHeaderService->getHeaderValue('Content-Type', $request);
+
+        return $contentTypeHeaderValue === JSONAPIInterface::MEDIA_TYPE;
     }
 
     /**
