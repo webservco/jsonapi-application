@@ -63,7 +63,7 @@ final class JSONAPIItemHandler extends AbstractForm implements JSONAPIHandlerInt
         }
 
         // Request method matches, set flag.
-        $this->isSent = true;
+        $this->setSent();
 
         // Check content type.
         if (!$this->requestService->contentTypeMatches($request)) {
