@@ -106,7 +106,7 @@ final class JSONAPIItemHandler extends AbstractForm implements JSONAPIHandlerInt
                     ),
                 );
             } catch (OutOfBoundsException $e) {
-                $formField->addErrorMessage($e->getMessage());
+                $this->addFormFieldErrorMessage($e->getMessage(), $formField);
             }
         }
 
