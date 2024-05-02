@@ -29,6 +29,7 @@
         "fig/http-message-util": "^1",
         "psr/http-message": "^2",
         "webservco/data": "^0",
+        "webservco/dependency-container": "^0",
         "webservco/form": "^0",
         "webservco/http": "^0",
         "webservco/jsonapi": "^0",
