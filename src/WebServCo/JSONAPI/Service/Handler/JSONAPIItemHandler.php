@@ -23,7 +23,7 @@ use function sprintf;
  */
 final class JSONAPIItemHandler extends AbstractForm implements JSONAPIHandlerInterface
 {
-    private const VALID_REQUEST_METHODS = [
+    private const array VALID_REQUEST_METHODS = [
         RequestMethodInterface::METHOD_DELETE,
         RequestMethodInterface::METHOD_GET,
         RequestMethodInterface::METHOD_POST,
