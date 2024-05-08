@@ -11,5 +11,8 @@ use WebServCo\JSONAPI\Contract\Service\JSONAPIHandlerInterface;
  */
 interface JSONAPIHandlerFactoryInterface
 {
-    public function createHandler(): JSONAPIHandlerInterface;
+    /**
+     * @param array<int,string> $acceptableRequestMethods
+     */
+    public function createHandler(array $acceptableRequestMethods): JSONAPIHandlerInterface;
 }

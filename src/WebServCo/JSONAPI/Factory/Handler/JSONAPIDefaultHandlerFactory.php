@@ -24,12 +24,14 @@ final class JSONAPIDefaultHandlerFactory implements JSONAPIHandlerFactoryInterfa
     ) {
     }
 
-    public function createHandler(): JSONAPIHandlerInterface
-    {
+    /**
+     * @param array<int,string> $acceptableRequestMethods
+     */
+    public function createHandler(
+        array $acceptableRequestMethods = [RequestMethodInterface::METHOD_GET],
+    ): JSONAPIHandlerInterface {
         return new JSONAPIItemHandler(
-            [
-                RequestMethodInterface::METHOD_GET,
-            ],
+            $acceptableRequestMethods,
             $this->dataExtractionContainer,
             $this->jsonApiRequestService,
             // no fields
