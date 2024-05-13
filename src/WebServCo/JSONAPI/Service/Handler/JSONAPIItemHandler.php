@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace WebServCo\JSONAPI\Service\Handler;
 
+use Error;
 use Fig\Http\Message\RequestMethodInterface;
+use Fig\Http\Message\StatusCodeInterface;
 use OutOfBoundsException;
 use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
@@ -57,7 +59,7 @@ final class JSONAPIItemHandler extends AbstractForm implements JSONAPIHandlerInt
     {
         // Check request method.
         if (!in_array($request->getMethod(), $this->acceptableRequestMethods, true)) {
-            $this->addErrorMessage('Request method does not match');
+            $this->addError(new Error('Request method does not match', StatusCodeInterface::STATUS_BAD_REQUEST));
 
             return false;
         }
@@ -67,7 +69,7 @@ final class JSONAPIItemHandler extends AbstractForm implements JSONAPIHandlerInt
 
         // Check content type.
         if (!$this->requestService->validateContentType($request)) {
-            $this->addErrorMessage('Content type does not match.');
+            $this->addError(new Error('Content type does not match.', StatusCodeInterface::STATUS_BAD_REQUEST));
 
             return false;
         }
@@ -115,7 +117,10 @@ final class JSONAPIItemHandler extends AbstractForm implements JSONAPIHandlerInt
                     ),
                 );
             } catch (OutOfBoundsException $e) {
-                $this->addFormFieldErrorMessage($e->getMessage(), $formField);
+                $this->addFormFieldErrorMessage(
+                    new Error($e->getMessage(), StatusCodeInterface::STATUS_BAD_REQUEST),
+                    $formField,
+                );
             }
         }
 
@@ -140,12 +145,12 @@ final class JSONAPIItemHandler extends AbstractForm implements JSONAPIHandlerInt
 
         try {
             if (!$this->requestService->versionMatches($requestBodyAsArray, 1.1)) {
-                $this->addErrorMessage('JSONAPI version does not match.');
+                $this->addError(new Error('JSONAPI version does not match.', StatusCodeInterface::STATUS_BAD_REQUEST));
 
                 return false;
             }
         } catch (OutOfBoundsException $exception) {
-            $this->addErrorMessage($exception->getMessage());
+            $this->addError(new Error($exception->getMessage(), StatusCodeInterface::STATUS_BAD_REQUEST));
 
             return false;
         }
