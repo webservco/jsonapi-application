@@ -33,6 +33,9 @@ final class JSONAPIRequestService implements JSONAPIRequestServiceInterface
     {
         $requestBody = $request->getBody()->getContents();
 
+        // Important! Otherwise, the stream body contents can not be retrieved later.
+        $request->getBody()->rewind();
+
         if ($requestBody === '') {
             if (!$this->requestBodyService->canHaveRequestBody($request)) {
                 // Correct that there is no request body.
@@ -44,9 +47,6 @@ final class JSONAPIRequestService implements JSONAPIRequestServiceInterface
         }
 
         $array = json_decode($requestBody, true, 512, JSON_THROW_ON_ERROR);
-
-        // Important! Otherwise, the stream body contents can not be retrieved later.
-        $request->getBody()->rewind();
 
         if (!is_array($array)) {
             throw new UnexpectedValueException('Error decoding JSON data.');
