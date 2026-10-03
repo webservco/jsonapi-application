@@ -18,12 +18,12 @@ use function json_decode;
 
 use const JSON_THROW_ON_ERROR;
 
-final class JSONAPIRequestService implements JSONAPIRequestServiceInterface
+final readonly class JSONAPIRequestService implements JSONAPIRequestServiceInterface
 {
     public function __construct(
-        private readonly DataExtractionContainerInterface $dataExtractionContainer,
-        private readonly RequestBodyServiceInterface $requestBodyService,
-        private readonly RequestHeaderServiceInterface $requestHeaderService,
+        private DataExtractionContainerInterface $dataExtractionContainer,
+        private RequestBodyServiceInterface $requestBodyService,
+        private RequestHeaderServiceInterface $requestHeaderService,
     ) {
     }
 
