@@ -8,6 +8,7 @@ use Error;
 use Fig\Http\Message\RequestMethodInterface;
 use Fig\Http\Message\StatusCodeInterface;
 use OutOfBoundsException;
+use Override;
 use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
 use WebServCo\Data\Contract\Extraction\DataExtractionContainerInterface;
@@ -55,6 +56,7 @@ final class JSONAPIItemHandler extends AbstractForm implements JSONAPIHandlerInt
         }
     }
 
+    #[Override]
     public function handleRequest(ServerRequestInterface $request): bool
     {
         // Check request method.

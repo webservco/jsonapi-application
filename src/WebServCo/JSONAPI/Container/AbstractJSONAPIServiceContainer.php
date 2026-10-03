@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebServCo\JSONAPI\Container;
 
+use Override;
 use WebServCo\Data\Contract\Extraction\DataExtractionContainerInterface;
 use WebServCo\Http\Service\Message\Request\RequestBodyService;
 use WebServCo\Http\Service\Message\Request\RequestHeaderService;
@@ -26,6 +27,7 @@ abstract class AbstractJSONAPIServiceContainer implements JSONAPIServiceContaine
     {
     }
 
+    #[Override]
     public function getDefaultHandlerFactory(): JSONAPIHandlerFactoryInterface
     {
         if ($this->defaultItemHandlerFactory === null) {
@@ -38,6 +40,7 @@ abstract class AbstractJSONAPIServiceContainer implements JSONAPIServiceContaine
         return $this->defaultItemHandlerFactory;
     }
 
+    #[Override]
     public function getJsonApiRequestService(): JSONAPIRequestServiceInterface
     {
         if ($this->jsonApiRequestService === null) {

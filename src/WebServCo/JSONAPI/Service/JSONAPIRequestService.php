@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebServCo\JSONAPI\Service;
 
+use Override;
 use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
 use WebServCo\Data\Contract\Extraction\DataExtractionContainerInterface;
@@ -29,6 +30,7 @@ final class JSONAPIRequestService implements JSONAPIRequestServiceInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function getRequestBodyAsArray(ServerRequestInterface $request): array
     {
         $requestBody = $request->getBody()->getContents();
@@ -55,6 +57,7 @@ final class JSONAPIRequestService implements JSONAPIRequestServiceInterface
         return $array;
     }
 
+    #[Override]
     public function validateContentType(ServerRequestInterface $request): bool
     {
         if (!$this->requestBodyService->canHaveRequestBody($request)) {
@@ -70,6 +73,7 @@ final class JSONAPIRequestService implements JSONAPIRequestServiceInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function versionMatches(array $requestBodyAsArray, float $expectedVersion = 1.1): bool
     {
         $version = $this->dataExtractionContainer->getLooseArrayNonEmptyDataExtractionService()->getNonEmptyFloat(

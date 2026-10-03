@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebServCo\JSONAPI\Container;
 
+use Override;
 use WebServCo\Data\Contract\Extraction\DataExtractionContainerInterface;
 use WebServCo\JSONAPI\Contract\Service\Container\APIJSONAPIServiceContainerInterface;
 use WebServCo\JSONAPI\Contract\Service\Container\APILocalServiceContainerInterface;
@@ -21,6 +22,7 @@ final class APILocalServiceContainer implements APILocalServiceContainerInterfac
     {
     }
 
+    #[Override]
     public function getJsonApiServiceContainer(): APIJSONAPIServiceContainerInterface
     {
         if ($this->jsonApiServiceContainer === null) {

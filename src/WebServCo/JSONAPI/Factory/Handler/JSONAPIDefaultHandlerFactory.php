@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WebServCo\JSONAPI\Factory\Handler;
 
 use Fig\Http\Message\RequestMethodInterface;
+use Override;
 use WebServCo\Data\Contract\Extraction\DataExtractionContainerInterface;
 use WebServCo\JSONAPI\Contract\Factory\Handler\JSONAPIHandlerFactoryInterface;
 use WebServCo\JSONAPI\Contract\Service\JSONAPIHandlerInterface;
@@ -27,6 +28,7 @@ final class JSONAPIDefaultHandlerFactory implements JSONAPIHandlerFactoryInterfa
     /**
      * @param array<int,string> $acceptableRequestMethods
      */
+    #[Override]
     public function createHandler(
         array $acceptableRequestMethods = [RequestMethodInterface::METHOD_GET],
     ): JSONAPIHandlerInterface {
