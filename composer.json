@@ -28,12 +28,12 @@
         "php" : "^8.4",
         "fig/http-message-util": "^1",
         "psr/http-message": "^2",
-        "webservco/data": "^1",
-        "webservco/dependency-container": "^1",
-        "webservco/form": "^1",
-        "webservco/http": "^1",
-        "webservco/jsonapi": "^1",
-        "webservco/view": "^1"
+        "webservco/data": "^2",
+        "webservco/dependency-container": "^2",
+        "webservco/form": "^2",
+        "webservco/http": "^2",
+        "webservco/jsonapi": "^2",
+        "webservco/view": "^2"
     },
     "require-dev": {
         "pds/skeleton": "^1",
