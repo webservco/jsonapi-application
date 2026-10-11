@@ -20,7 +20,7 @@
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
-    "description" : "A PHP component/library.",
+    "description" : "A PHP component/library. Request validation, document views, error objects and containers for JSON:API endpoints.",
     "homepage" : "https://webserv.co",
     "keywords" : [
         "component",
